@@ -1,6 +1,6 @@
 package com.example.stocks_feed_api.controller;
 
-import com.example.stocks_feed_api.model.User;
+import com.example.stocks_feed_api.dto.UserDto;
 import com.example.stocks_feed_api.service.UserService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ public class RegistrationController {
     private UserService userService;
 
     @PostMapping
-    public void save(@RequestBody User user) {
-        userService.save(user);
+    public void save(@RequestBody UserDto userDto) {
+        userService.register(userDto);
     }
 }

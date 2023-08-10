@@ -1,17 +1,15 @@
 package com.example.stocks_feed_api.mapper;
 
+import com.example.stocks_feed_api.dto.UserDto;
 import com.example.stocks_feed_api.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface UserMapper {
-    @Select("SELECT * FROM USERS")
-    List<User> findAll();
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Insert("INSERT INTO USERS(username, password) VALUES(username=#{username}, password=#{password})")
-    int save(User user);
+    User toModel(UserDto userDto);
+
+    UserDto toDto(User user);
 }
