@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
-    private UserMapper userMapper;
 
     public void register(@NonNull UserDto userDto) {
         log.entry(userDto);
@@ -22,7 +21,7 @@ public class UserService {
             throw new UserAlreadyExistException("There is an account with that username: "
                     + userDto.getUsername());
         }
-        userRepository.save(userMapper.toModel(userDto));
+        userRepository.save(UserMapper.INSTANCE.toModel(userDto));
         log.exit(userDto);
     }
 
