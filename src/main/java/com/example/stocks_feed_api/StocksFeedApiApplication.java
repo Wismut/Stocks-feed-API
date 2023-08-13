@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 //@EnableWebSecurity
 @MapperScan("com.example.stocks_feed_api.repository")
 @SpringBootApplication(exclude = {
-//        SecurityAutoConfiguration.class,
-//        UserDetailsServiceAutoConfiguration.class
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class
 })
 public class StocksFeedApiApplication {
     public static void main(String[] args) {
