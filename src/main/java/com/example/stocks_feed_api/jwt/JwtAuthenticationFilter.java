@@ -1,5 +1,6 @@
 package com.example.stocks_feed_api.jwt;
 
+import com.example.stocks_feed_api.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import static java.util.Objects.isNull;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtService;
     private final JwtUserDetailsService jwtUserDetailsService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -43,8 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         username = jwtService.getUsernameFromToken(jwt);
         if (StringUtils.hasText(username)
                 && isNull(SecurityContextHolder.getContext().getAuthentication())) {
-            UserDetails userDetails = jwtUserDetailsService
-                    .loadUserByUsername(username);
+            UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
             if (jwtService.validateToken(jwt, userDetails)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
