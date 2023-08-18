@@ -1,12 +1,14 @@
 package com.example.stocks_feed_api.jwt;
 
-import com.example.stocks_feed_api.model.User;
 import com.example.stocks_feed_api.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static java.util.Objects.isNull;
 
@@ -17,10 +19,10 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final User user = userRepository.findByUsername(username);
+        final var user = userRepository.findByUsername(username);
         if (isNull(user)) {
             throw new UsernameNotFoundException(username);
         }
-        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), null);
+        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole().name())));
     }
 }

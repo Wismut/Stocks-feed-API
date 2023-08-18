@@ -26,8 +26,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = User.builder().username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER).build();
-        userRepository.save(user);
         var jwt = jwtService.createToken(user.getUsername(), user.getPassword());
+        user.setToken(jwt);
+        userRepository.save(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 
@@ -40,6 +41,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new IllegalArgumentException("Invalid username or password");
         }
         var jwt = jwtService.createToken(user.getUsername(), user.getPassword());
+        user.setToken(jwt);
+        userRepository.save(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 }

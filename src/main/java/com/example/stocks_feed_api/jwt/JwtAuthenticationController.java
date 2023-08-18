@@ -16,7 +16,7 @@ public class JwtAuthenticationController {
     private final JwtAuthenticationService jwtAuthenticationService;
 
     @PostMapping
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
         final String token = jwtAuthenticationService.createToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         return ResponseEntity.ok(new JwtResponse(token));
     }
