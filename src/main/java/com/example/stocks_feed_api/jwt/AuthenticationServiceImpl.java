@@ -1,14 +1,17 @@
 package com.example.stocks_feed_api.jwt;
 
+import com.example.stocks_feed_api.dto.SignInRequest;
+import com.example.stocks_feed_api.dto.SignUpRequest;
+import com.example.stocks_feed_api.model.Role;
+import com.example.stocks_feed_api.model.User;
 import com.example.stocks_feed_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.truongbn.security.dao.request.SignUpRequest;
-import com.truongbn.security.dao.request.SigninRequest;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +23,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtAuthenticationResponse signup(SignUpRequest request) {
-        var user = User.builder().username(request.getFirstName()).lastName(request.getLastName())
-                .email(request.getEmail()).password(passwordEncoder.encode(request.getPassword()))
+        var user = User.builder().username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER).build();
         userRepository.save(user);
-        var jwt = jwtService.createToken(user);
+        var jwt = jwtService.createToken(user.getUsername(), user.getPassword());
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 
     @Override
-    public JwtAuthenticationResponse signin(SigninRequest request) {
+    public JwtAuthenticationResponse signin(SignInRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = userRepository.findByUsername(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-        var jwt = jwtService.createToken(user);
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        var user = userRepository.findByUsername(request.getUsername());
+        if (isNull(user)) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+        var jwt = jwtService.createToken(user.getUsername(), user.getPassword());
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 }

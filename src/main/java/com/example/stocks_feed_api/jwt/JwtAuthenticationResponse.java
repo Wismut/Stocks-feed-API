@@ -1,4 +1,4 @@
-package com.example.stocks_feed_api.dto;
+package com.example.stocks_feed_api.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpRequest {
-    private String username;
-    private String password;
+public class JwtAuthenticationResponse {
+    private String token;
 }

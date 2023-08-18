@@ -18,20 +18,20 @@ public class JwtAuthenticationService {
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
 
-    public String createToken(@NonNull String username, @NonNull String password) throws Exception {
+    public String createToken(@NonNull String username, @NonNull String password) {
         authenticate(username, password);
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(username);
         return jwtTokenUtil.generateToken(userDetails);
     }
 
-    private void authenticate(String username, String password) throws Exception {
+    private void authenticate(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
+            throw new RuntimeException("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new RuntimeException("INVALID_CREDENTIALS", e);
         }
     }
 }
