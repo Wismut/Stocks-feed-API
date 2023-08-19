@@ -4,7 +4,7 @@ import com.example.stocks_feed_api.dto.SignInRequest;
 import com.example.stocks_feed_api.dto.SignUpRequest;
 
 public interface AuthenticationService {
-    JwtAuthenticationResponse signup(SignUpRequest request);
+    String signup(SignUpRequest request);
 
     JwtAuthenticationResponse signin(SignInRequest request);
 }

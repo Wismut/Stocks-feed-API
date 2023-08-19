@@ -1,5 +1,7 @@
-package com.example.stocks_feed_api.jwt;
+package com.example.stocks_feed_api.controller;
 
+import com.example.stocks_feed_api.dto.SignUpRequest;
+import com.example.stocks_feed_api.jwt.AuthenticationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/register")
-public class JwtAuthenticationController {
-    private final JwtAuthenticationService jwtAuthenticationService;
+public class RegistrationController {
+    private final AuthenticationService authenticationService;
 
     @PostMapping
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
-        final String token = jwtAuthenticationService.createToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        return ResponseEntity.ok(new JwtResponse(token));
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequest request) {
+        final String response = authenticationService.signup(request);
+        return ResponseEntity.ok(response);
     }
 }
