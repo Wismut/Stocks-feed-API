@@ -12,7 +12,7 @@ public interface UserRepository {
     @Select("SELECT * FROM USERS")
     List<User> findAll();
 
-    @Insert("INSERT INTO USERS(username, password) VALUES(username=#{username}, password=#{password})")
+    @Insert("INSERT INTO users(username, password, role) VALUES(#{username}, #{password}, #{role})")
     int save(User user);
 
     @Select("SELECT * FROM USERS WHERE username=#{username}")
