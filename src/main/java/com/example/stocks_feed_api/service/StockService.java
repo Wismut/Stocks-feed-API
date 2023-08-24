@@ -1,17 +1,22 @@
 package com.example.stocks_feed_api.service;
 
 import com.example.stocks_feed_api.model.Stock;
-import com.example.stocks_feed_api.repository.StockRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.data.redis.core.ReactiveValueOperations;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
 public class StockService {
-    private final StockRepository repository;
+    @Autowired
+    private ReactiveRedisTemplate<String, Stock> redisTemplate;
+    private ReactiveValueOperations<String, Stock> reactiveValueOps;
 
-    public Mono<Stock> findByCode(String code) {
-        return repository.findByCode(code);
+    @PostConstruct
+    public void setup() {
+        reactiveValueOps = redisTemplate.opsForValue();
     }
 }
