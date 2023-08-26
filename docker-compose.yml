@@ -1,0 +1,45 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "8085:8085"
+    links:
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://0.0.0.0:5432/stocks_feed
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - /src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - my-network
+
+  redis:
+    image: redis:7.2.0
+    ports:
+      - "6379:6379"
+    networks:
+      - my-network
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+
+  db:
+    image: postgres:15.4
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge

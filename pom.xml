@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.max</groupId>
     <artifactId>StocksFeedAPI</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Stocks feed API</name>
     <description>Stocks feed API</description>
     <properties>
